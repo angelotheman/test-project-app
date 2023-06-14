@@ -22,7 +22,7 @@ namespace MvcMovie.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-              return _context.Movie != null ?
+              return _context.Movie != null ? 
                           View(await _context.Movie.ToListAsync()) :
                           Problem("Entity set 'MvcMovieContext.Movie'  is null.");
         }
@@ -56,7 +56,7 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,Price,Genre,FirstName,LastName,ReleaseDate,Email,Contact,Location,FaultCategory,FaultDescription")] Movie movie)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Genre,FirstName,LastName,ReleaseDate,Email,Contact,Location,FaultCategory,FaultDescription")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -102,9 +102,16 @@ namespace MvcMovie.Controllers
                     _context.Update(movie);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException) when (!MovieExists(movie.Id))
+                catch (DbUpdateConcurrencyException)
                 {
-                    return NotFound();
+                    if (!MovieExists(movie.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -143,7 +150,7 @@ namespace MvcMovie.Controllers
             {
                 _context.Movie.Remove(movie);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

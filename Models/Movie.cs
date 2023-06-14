@@ -1,18 +1,42 @@
+using System.Buffers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MvcMovie.Models;
-
-public class Movie
+namespace MvcMovie.Models
 {
-    public int Id { get; set; }
-    public string? Title { get; set; }
+    public class Movie
+    {
+        public int Id { get; set; }
+        public string? Title { get; set; }
+        public int Price { get; set; }
+        public string? Genre { get; set; }
+        [Display(Name = "First Name")]
+        public string? FirstName { get; set; }
+        [Display(Name = "Last Name")]
+        public string? LastName { get; set; }
 
-    [Display(Name = "Date Released")]
-    [DataType(DataType.Date)]
-    public DateTime ReleaseDate { get; set; }
-    public string? Genre { get; set; }
-    [Range(10, 1000, ErrorMessage = "The price should be between 10 and 1000")]
-    [Column(TypeName = "decimal(18, 2)")]
-    public decimal Price { get; set; }
+        [Display(Name = "Date Occurred")]
+        [DataType(DataType.Date)]
+        public DateTime ReleaseDate { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Email is invalid")]
+        public string? Email { get; set; }
+        [Required(ErrorMessage = "Phone address required")]
+        //[Phone(ErrorMessage = "Invalid Contact Number")]
+        public int Contact { get; set; }
+        public string? Location { get; set; }
+        [Display(Name = "Fault Category")]
+        public Category FaultCategory { get; set; }
+        [Display(Name = "Fault Description")]
+        public string? FaultDescription { get; set; }
+    }
+
+    public enum Category {
+        Mechanical,
+        Plumbing,
+        Electrical,
+        AirConditioning,
+        Building,
+        Painting
+    }
 }
